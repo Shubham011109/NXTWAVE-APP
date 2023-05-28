@@ -8,7 +8,8 @@ const ErrorImage = props => (
       const {activeTheme} = value
 
       const refreshPage = () => {
-        props.refresh()
+        const {refresh} = props
+        refresh()
       }
 
       return (
