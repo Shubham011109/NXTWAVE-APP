@@ -1,38 +1,47 @@
 import {Component} from 'react'
-import Cookies from 'js-cookie'
-import {Link, Redirect} from 'react-router-dom'
-
 import {AiFillFire} from 'react-icons/ai'
-
-import LoaderComp from '../Loader'
-
-import AppTheme from '../../context/Theme'
-
-import './index.css'
-
+import Loader from 'react-loader-spinner'
+import Cookies from 'js-cookie'
+import Header from '../Header'
+import Sidebar from '../Sidebar'
+import TrendingVideoCard from '../TrendingVideoCard'
+import ThemeContext from '../../Context/ThemeContext'
 import {
-  HomeContainer,
-  ListContainer,
-  ListItem,
-  ImageTag,
-  LogoImage,
-  HeadDiv,
-  HeaderEl,
-  ContentDiv,
-  ParaTag,
+  MainBody,
+  SidebarContainer,
+  TrendingContainer,
+  TrendingMenuContainer,
+  IconContainer,
+  MenuHeading,
+  LoaderContainer,
+  FailureContainer,
+  FailureImg,
+  FailureText,
+  RetryButton,
+  VideosList,
+  TrendingMainContainer,
 } from './styledComponents'
 
-import ErrorImage from '../ErrorImage'
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  inProgress: 'IN_PROGRESS',
+}
 
 class Trending extends Component {
-  state = {dataArray: [], isLoading: true, status: ''}
+  state = {
+    videosList: [],
+    apiStatus: apiStatusConstants.initial,
+  }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.getVideos()
   }
 
   getVideos = async () => {
-    this.setState({isLoading: true})
+    this.setState({apiStatus: apiStatusConstants.inProgress})
+
     const jwtToken = Cookies.get('jwt_token')
     const url = 'https://apis.ccbp.in/videos/trending'
     const options = {
@@ -41,108 +50,134 @@ class Trending extends Component {
       },
       method: 'GET',
     }
-    try {
-      const response = await fetch(url, options)
-      if (response.ok) {
-        const data = await response.json()
-        await this.setState({dataArray: data.videos, status: true})
-      }
-    } catch {
-      await this.setState({status: false})
+
+    const response = await fetch(url, options)
+    const data = await response.json()
+
+    if (response.ok === true) {
+      const updatedData = data.videos.map(eachItem => ({
+        id: eachItem.id,
+        channel: {
+          name: eachItem.channel.name,
+          profileImageUrl: eachItem.channel.profile_image_url,
+        },
+        publishedAt: eachItem.published_at,
+        thumbnailUrl: eachItem.thumbnail_url,
+        title: eachItem.title,
+        viewCount: eachItem.view_count,
+      }))
+      this.setState({
+        videosList: updatedData,
+        apiStatus: apiStatusConstants.success,
+      })
+    } else {
+      this.setState({
+        apiStatus: apiStatusConstants.failure,
+      })
     }
-    this.setState({isLoading: false})
+  }
+
+  successView = () => {
+    const {videosList} = this.state
+
+    return (
+      <VideosList>
+        {videosList.map(each => (
+          <TrendingVideoCard videoDetails={each} key={each.id} />
+        ))}
+      </VideosList>
+    )
+  }
+
+  failureView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        const theme = isDarkTheme ? 'dark' : 'light'
+        const imgUrl = isDarkTheme
+          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+
+        return (
+          <FailureContainer>
+            <FailureImg src={imgUrl} alt="failure view" />
+
+            <FailureText theme={theme}>Oops! Something Went Wrong</FailureText>
+            <FailureText theme={theme} as="p">
+              We are having some trouble to complete your request. Please try
+              again
+            </FailureText>
+            <RetryButton type="button" onClick={this.getVideos}>
+              Retry
+            </RetryButton>
+          </FailureContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
+
+  loader = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        return (
+          <LoaderContainer className="loader-container" data-testid="loader">
+            <Loader
+              type="ThreeDots"
+              color={isDarkTheme ? '#ffffff' : '#000000'}
+              height="50"
+              width="50"
+            />
+          </LoaderContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
+
+  checkApiStatus = () => {
+    const {apiStatus} = this.state
+
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return this.successView()
+      case apiStatusConstants.failure:
+        return this.failureView()
+      case apiStatusConstants.inProgress:
+        return this.loader()
+      default:
+        return null
+    }
   }
 
   render() {
-    const {dataArray, isLoading, status} = this.state
-    const jwtToken = Cookies.get('jwt_token')
-    if (jwtToken === undefined) {
-      return <Redirect to="/login" />
-    }
     return (
-      <AppTheme.Consumer>
+      <ThemeContext.Consumer>
         {value => {
-          const {activeTheme} = value
-
-          const color = activeTheme === 'light' ? '#000000' : '#ffffff'
-          const bgColor = activeTheme === 'light' ? '#f9f9f9' : '#000000'
+          const {isDarkTheme} = value
+          const theme = isDarkTheme ? 'dark' : 'light'
 
           return (
-            <HomeContainer bgColor={`${bgColor}`} color={`${color}`}>
-              {isLoading ? (
-                <LoaderComp />
-              ) : (
-                <>
-                  {status ? (
-                    <>
-                      <HeadDiv>
-                        <HeaderEl
-                          bgColor={
-                            activeTheme === 'light' ? '#f1f1f1' : '#181818'
-                          }
-                          color={color}
-                        >
-                          <AiFillFire
-                            size={40}
-                            className={`trend-icon ${activeTheme}-icon`}
-                          />{' '}
-                          Trending
-                        </HeaderEl>
-                      </HeadDiv>
-                      <ContentDiv>
-                        {dataArray.map(item => (
-                          <Link
-                            to={`/videos/${item.id}`}
-                            className={
-                              activeTheme === 'light'
-                                ? 'link-light'
-                                : 'link-dark'
-                            }
-                            key={item.id}
-                          >
-                            <ListContainer>
-                              <ListItem>
-                                <ImageTag
-                                  src={`${item.thumbnail_url}`}
-                                  width="350px"
-                                />
-                              </ListItem>
-                              <ListItem>
-                                <div className="logo-div">
-                                  <LogoImage
-                                    src={`${item.channel.profile_image_url}`}
-                                    width="30px"
-                                  />
-                                </div>
-                                <div>
-                                  <ParaTag fontSize="15px">
-                                    {item.title}
-                                  </ParaTag>
-                                  <ParaTag fontSize="12px">
-                                    {item.channel.name}
-                                  </ParaTag>
-                                  <ParaTag fontSize="12px">
-                                    {item.view_count} views .{' '}
-                                    <span>{item.published_at}</span>
-                                  </ParaTag>
-                                </div>
-                              </ListItem>
-                            </ListContainer>
-                          </Link>
-                        ))}
-                      </ContentDiv>
-                    </>
-                  ) : (
-                    <ErrorImage render={this.getVideos} />
-                  )}
-                </>
-              )}
-            </HomeContainer>
+            <TrendingMainContainer data-testid="trending" theme={theme}>
+              <Header />
+              <MainBody>
+                <SidebarContainer>
+                  <Sidebar />
+                </SidebarContainer>
+                <TrendingContainer>
+                  <TrendingMenuContainer theme={theme}>
+                    <IconContainer theme={theme}>
+                      <AiFillFire size={40} color="#ff0b37" />
+                    </IconContainer>
+                    <MenuHeading theme={theme}>Trending</MenuHeading>
+                  </TrendingMenuContainer>
+                  {this.checkApiStatus()}
+                </TrendingContainer>
+              </MainBody>
+            </TrendingMainContainer>
           )
         }}
-      </AppTheme.Consumer>
+      </ThemeContext.Consumer>
     )
   }
 }
-
 export default Trending

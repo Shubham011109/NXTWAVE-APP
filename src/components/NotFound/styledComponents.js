@@ -1,26 +1,41 @@
 import styled from 'styled-components'
 
-export const ImageEl = styled.img`
-  width: 90%;
-  @media (min-width: 768px) {
-    width: 40%;
+export const MainBody = styled.div`
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    height: 90vh;
   }
 `
-export const DivEl = styled.div`
-  height: 100%;
-  background-color: ${props => props.bgColor};
-  color: ${props => props.color};
+
+export const SidebarContainer = styled.div`
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
+`
+
+export const NotFoundContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  text-align: center;
   align-items: center;
-  @media (max-width: 767px) {
-    padding: 20px 20px;
-    padding-bottom: 0;
-    height: 100vh;
-    overflow: hidden;
+  padding: 10px;
+  width: 100%;
+  background-color: ${props =>
+    props.theme === 'dark' ? '#181818' : '#f9f9f9'};
+`
+
+export const NotFoundImage = styled.img`
+  width: 80%;
+  padding-top: 15px;
+
+  @media screen and (min-width: 768px) {
+    width: 50%;
   }
 `
-export const Header = styled.h1``
-
-export const Para = styled.p``
+export const NotFoundText = styled.h1`
+  margin: 0px;
+  padding: 5px;
+  color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#181818')};
+`

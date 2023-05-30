@@ -1,104 +1,106 @@
-import styled, {keyframes} from 'styled-components'
+import styled from 'styled-components'
 
-const FadeIn = keyframes`
-    0%{
-        opacity:0;
-    }
-    100%{
-        opacity:1;
-    }
-`
-
-export const HeaderContainer = styled.div`
-  position: fixed;
-  width: 100%;
+export const NavMobileContainer = styled.nav`
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  padding: 15px;
-  background-color: ${props => props.bgColor};
-  @media (max-width: 767px) {
-    padding-bottom: 29px;
-  }
-`
-
-export const HeaderContentsSmallContainer = styled.div`
-  display: flex;
   align-items: center;
-  @media (min-width: 768px) {
-    display: none;
-  }
-`
-export const HeaderContentsLargeContainer = styled.div`
-  display: flex;
-  align-items: center;
-  @media (max-width: 767px) {
+  padding: 20px;
+  background-color: ${props =>
+    props.theme === 'dark' ? '#212121' : '#f4f4f4'};
+  @media screen and (min-width: 768px) {
     display: none;
   }
 `
 
-export const ImageEl = styled.img`
-  cursor: ${props => props.cursor};
-  @media (max-width: 767px) {
-    height: ${props => props.height};
-    display: ${props => props.display};
-  }
-  @media (min-width: 768px) {
-    height: 30px;
-    margin: 0px ${props => props.margin};
+export const NavLargeContainer = styled(NavMobileContainer)`
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: flex;
   }
 `
 
-export const ButtonElSmall = styled.button`
-    background: none;
-    border: none;
-    outline: none;
-    color: ${props => props.color};
-}
+export const HeaderLogoImg = styled.img`
+  width: 150px;
+  @media screen and (min-width: 768px) {
+    width: 20 0px;
+  }
+`
+export const NavMobileIcons = styled.div``
+
+export const IconButton = styled.button`
+  background-color: transparent;
+  border: none;
+  margin-left: 5px;
+  margin-right: 5px;
 `
 
-export const ButtonElLarge = styled.button`
-  color: ${props => props.color};
-  border: ${props => props.border};
-  border-color: ${props => props.color};
-  background: transparent;
-  outline: none;
-  padding: ${props => props.padding};
-  cursor: pointer;
+export const CloseButton = styled.div`
+  align-self: flex-end;
+  margin-top: 10px;
+  margin-right: 10px;
 `
-export const ListContainer = styled.ul`
-  list-style-type: none;
+export const LogoutPopupContent = styled.div`
+  background-color: ${props =>
+    props.theme === 'dark' ? '#0f0f0f' : '#f9f9f9'};
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: fixed;
-  background: ${props => props.bgColor};
-  width: 103%;
-  height: 105vh;
-  top: -16px;
-  left: -9px;
-  padding-left: 40%;
-  @media (min-width: 768px) {
-    display: none;
+  align-items: center;
+  color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#0f0f0f')};
+  @media screen and (min-width: 768px) {
+    width: 50%;
   }
-`
-export const ExtraDiv = styled.div`
-  display: ${props => props.display};
-  animation: ${FadeIn} 0.5s;
 `
 
-export const ListItem = styled.li`
-  padding: 10px 0;
-  :hover {
-    background-color: ${props => props.bgColor};
-    color: ${props => props.color};
-    .nav-icons {
-      color: red;
-    }
-  }
+export const Button = styled.button`
+  background-color: ${props => (props.outline ? 'transparent' : '#3b82f6')};
+  width: 80px;
+  height: 35px;
+  margin: 5px;
+  color: ${props => (props.outline ? '#3b82f6' : 'white')};
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #3b82f6;
 `
-export const Para = styled.p`
-  position: absolute;
-  top: 45px;
-  right: 50px;
-  color: ${props => props.color};
+export const ProfileIcon = styled.img`
+  width: 25px;
+  margin-left: 15px;
+  margin-right: 15px;
+`
+export const NavLargeIcons = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+export const LargeLogoutButton = styled(Button)`
+  margin: 0px;
+  margin-left: 15px;
+  margin-right: 15px;
+  height: 25px;
+  color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#3b82f6')};
+  border-color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#3b82f6')};
+`
+export const MenuPopupMobile = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  padding-top: 20px;
+  background-color: ${props =>
+    props.theme === 'dark' ? '#0f0f0f' : '#f9f9f9'};
+`
+export const MenuListMobile = styled.div`
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `

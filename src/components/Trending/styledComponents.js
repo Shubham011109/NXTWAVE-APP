@@ -1,86 +1,93 @@
 import styled from 'styled-components'
 
-export const HomeContainer = styled.div`
-  background-color: ${props => props.bgColor};
-  color: ${props => props.color};
-  @media (max-width: 767px) {
-    margin-top: -21px;
+export const MainBody = styled.div`
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
   }
 `
 
-export const ErrorContainer = styled.div`
-  height: 100vh;
+export const SidebarContainer = styled.div`
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
+`
+
+export const TrendingMainContainer = styled.div`
+  background-color: ${props =>
+    props.theme === 'dark' ? '#0f0f0f' : '#f9f9f9'};
+`
+
+export const TrendingContainer = styled.div`
+  height: 90vh;
+  overflow-x: auto;
+
+  flex-grow: 1;
+  padding: 15px;
+`
+
+export const TrendingMenuContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 7px;
+  @media screen and (min-width: 768px) {
+    padding-left: 20px;
+  }
+  background-color: ${props =>
+    props.theme === 'dark' ? '#424242' : '#f8fafc'};
+`
+export const IconContainer = styled.div`
+  padding: 10px;
+  border-radius: 40px;
+  margin-right: 10px;
+  margin-left: 10px;
+  background-color: ${props =>
+    props.theme === 'dark' ? '#0f0f0f' : '#e2e8f0'};
+`
+export const MenuHeading = styled.h1`
+  color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#0f0f0f')};
+`
+export const LoaderContainer = styled.div`
+  text-align: center;
+`
+export const FailureContainer = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: center;
   align-items: center;
-  justify-content: center;
+  margin: 10px;
 `
 
-export const HeadDiv = styled.div`
-  @media (max-width: 767px) {
-    margin-top: 45px;
+export const FailureImg = styled.img`
+  width: 80%;
+  padding-top: 15px;
+
+  @media screen and (min-width: 768px) {
+    width: 50%;
   }
 `
 
-export const HeaderEl = styled.h1`
-  background-color: ${props => props.bgColor};
-  color: ${props => props.color};
-  padding: 20px 0;
-  padding-left: 40px;
-  display: flex;
-  align-items: center;
+export const FailureText = styled.h1`
+  margin: 0px;
+  padding: 5px;
+  color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#181818')};
 `
-
-export const ListContainer = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin-bottom: 25px;
-  @media (min-width: 768px) {
-    display: flex;
-  }
-`
-
-export const ListItem = styled.li`
-  margin-right: 20px;
-  display: flex;
-  cursor: pointer;
-`
-
-export const ImageTag = styled.img`
-  width: ${props => props.width};
-  object-fit: contain;
-  @media (max-width: 767px) {
-    width: 100%;
-  }
-`
-export const LogoImage = styled.img`
-  width: ${props => props.width};
-  object-fit: contain;
-`
-
-export const ContentDiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 30px;
-`
-
-export const ParaTag = styled.p`
-  font-size: ${props => props.fontSize};
-`
-export const ErrorImg = styled.img`
-  width: 35%;
-  object-fit: contain;
-`
-export const Head = styled.h1``
-
-export const Para = styled.p``
-
-export const Button = styled.button`
+export const RetryButton = styled.button`
   background-color: #4f46e5;
-  color: #ffffff;
-  outline: none;
+  color: white;
   border: none;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 4px;
+  width: 100px;
+  height: 30px;
+  margin-top: 10px;
+  border-radius: 5px;
+`
+
+export const VideosList = styled.ul`
+  list-style: none;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 `
